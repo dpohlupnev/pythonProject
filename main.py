@@ -19,8 +19,17 @@ class Student:
         else:
             return 'Ошибка'
 
+    def grade_student(self):
+        sum_grade = []
+        for grade in self.grades:
+            
+
     def __str__(self):
-        return 'Имя: ' + self.name + '\n' + 'Фамилия: ' + self.surname + '\n' + 'Средняя оценка за домашние задания: ' + '\n' + 'Курсы в процессе изучения: ' + self.courses_in_progress + '\n' + 'Завершенные курсы: ' + self.finished_courses
+        return f"Студент\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: \nКурсы в процессе изучения: {self.courses_in_progress}\nЗавершенные курсы: {self.finished_courses}\n"
+
+    def __lt__(self, other):
+        if self.grades < other.grades:
+            return 'worst_student'
 
 
 class Mentor:
@@ -36,7 +45,7 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
 
     def __str__(self):
-        return 'Имя: ' + self.name + '\n' + 'Фамилия: ' + self.surname + '\n' + 'Средняя оценка за домашние задания: '
+        return f"Лектор\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: \n"
 
 
 class Reviewer(Mentor):
@@ -53,7 +62,7 @@ class Reviewer(Mentor):
             return 'Ошибка'
 
     def __str__(self):
-        return 'Имя: ' + self.name + '\n' + 'Фамилия: ' + self.surname
+        return f"Проверяющий\nИмя: {self.name}\nФамилия: {self.surname}\n"
 
 
 one_student = Student('Ruoy', 'Eman', 'man')
@@ -76,7 +85,16 @@ one_student.rate_lec(one_lecturer, 'JavaScript', 4)
 two_student.rate_lec(two_lecturer, 'Python', 10)
 two_student.rate_lec(two_lecturer, 'Git', 7)
 
-one_student.rate_lec
+one_reviewer = Reviewer('Jay', 'Simpson')
+
+two_reviewer = Reviewer('Katy', 'Perry')
+
+print(one_student)
+print(two_student)
+print(one_lecturer)
+print(two_lecturer)
+print(one_reviewer)
+print(two_reviewer)
 
 # cool_mentor.rate_hw(best_student, 'Python', 10)
 # cool_mentor.rate_hw(best_student, 'Python', 10)
