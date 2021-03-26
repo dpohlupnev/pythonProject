@@ -117,6 +117,7 @@ print(two_lecturer)
 print(one_reviewer)
 print(two_reviewer)
 
+print(one_student)
 # cool_mentor.rate_hw(best_student, 'Python', 10)
 # cool_mentor.rate_hw(best_student, 'Python', 10)
 # cool_mentor.rate_hw(best_student, 'Python', 10)
