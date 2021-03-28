@@ -5,11 +5,13 @@ class Student:
         self.gender = gender
         self.finished_courses = []
         self.courses_in_progress = []
-        self.grades = {}
+        self.hw_grade = {}
+        self.average_rating_stud = None
 
     def add_courses(self, course_name):
         self.finished_courses.append(course_name)
 
+# метод выставления оценки лектору за лекции, добавляется в класс Lecturer, переменную student_grade (работает)
     def rate_lec(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturer) and course in self.finished_courses and course in lecturer.courses_attached:
             if course in lecturer.student_grade:
@@ -19,20 +21,25 @@ class Student:
         else:
             return 'Ошибка'
 
+# метод подсчета средней оценки студента за дз, поставленной проверящим, считается в этом же классе (не работает)
     def grade_student(self):
         sum_grade = []
-        for grade in self.grades.items():
+        for grade in self.hw_grade.items():
             sum_grade += grade[1]
         self.average_rating_stud = str(round(sum(sum_grade) / len(sum_grade)))
-
         return self.average_rating_stud
 
-    def __str__(self):
-        return f"Студент\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: \nКурсы в процессе изучения: {self.courses_in_progress}\nЗавершенные курсы: {self.finished_courses}\n"
+# перезагрузка магического метода lt (less than) для сравнения двух студентов (не работает, т.к. не дописан, непонятно как сразу вывести на экран результат сравнения)
+    def __lt__(self, other_stud):
+        if isinstance(other_stud, Student):
+            if other_stud.average_rating_stud < self.average_rating_stud:
+                self.name = 'Лучший студент!'
+        else:
+            return f"{other_stud.name} Не является студентом!"
 
-    def __lt__(self, other):
-        if self.grades < other.grades:
-            return 'worst_student'
+# перезагрузка магического метода str (работает)
+    def __str__(self):
+        return f"Студент\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self.average_rating_stud}\nКурсы в процессе изучения: {self.courses_in_progress}\nЗавершенные курсы: {self.finished_courses}\n"
 
 
 class Mentor:
@@ -45,29 +52,43 @@ class Mentor:
 class Lecturer(Mentor):
     def __init__(self, name, surname):
         self.student_grade = {}
-        self.average_rating_stud = None
+        self.average_rating_lec = None
         super().__init__(name, surname)
 
-    def __str__(self):
-        return f"Лектор\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average_rating_stud}\n"
-
+# метод подсчета средней оценки лектора за лекции, поставленной студентом, считается в этом же классе (не работает)
     def grade_student(self):
         sum_grade = []
-        for grade in self.grades.items():
+        for grade in self.student_grade.items():
             sum_grade += grade[1]
-        self.average_rating_stud = str(round(sum(sum_grade) / len(sum_grade)))
+        self.average_rating_lec = str(round(sum(sum_grade) / len(sum_grade)))
+
+        return self.average_rating_lec
+
+# перезагрузка магического метода lt (less than) для сравнения двух лекторов (не работает, т.к. не дописан, непонятно как сразу вывести на экран результат сравнения)
+    def __lt__(self, other_lec):
+        if not isinstance(other_lec, Lecturer):
+            print('Не является лектором!')
+            if other_lec.average_rating_lec < self.average_rating_lec:
+                self.name = 'Лучший лектор!'
+        else:
+            return f"{other_lec.name} Не является лектором!"
+
+# перезагрузка магического метода str для лектора (работает)
+    def __str__(self):
+        return f"Лектор\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average_rating_lec}\n"
 
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
 
+# метод выставления оценки студенту за дз, добавляется в класс Student, переменную hw_grade
     def rate_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
-            if course in student.grades.keys():
-                student.grades[course] += [grade]
+            if course in student.hw_grade.keys():
+                student.hw_grade[course] += [grade]
             else:
-                student.grades[course] = [grade]
+                student.hw_grade[course] = [grade]
         else:
             return 'Ошибка'
 
@@ -79,6 +100,7 @@ class Reviewer(Mentor):
     #
     #     return self.average_rating_stud
 
+# перезагрузка магического метода str для проверяющего (работает)
     def __str__(self):
         return f"Проверяющий\nИмя: {self.name}\nФамилия: {self.surname}\n"
 
